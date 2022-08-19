@@ -1,8 +1,20 @@
 ################################
 ### FreeSwitch headers files found in libfreeswitch-dev ###
-FS_INCLUDES=/usr/include/freeswitch
-FS_MODULES=/usr/lib/freeswitch/mod
+FS_INCLUDES=/usr/local/freeswitch/include/freeswitch
+FS_MODULES=/usr/local/freeswitch/mod
 ################################
+
+DESC="FreeSWITCH G.729A module using the opensource bcg729 implementation by Belledonne Communications"
+DEBNAME=freeswitch-mod-bcg729
+VERSION=1.0.0
+SUB_VERSION=$(shell git rev-list --count HEAD)
+AUTHOR="Roberto Paradinha"
+VENDOR="Broadvoice"
+URL="https://www.broadvoice.com"
+FPM=/usr/local/bin/fpm
+FS_VERSION=freeswitch
+
+MODNAME = mod_bcg729.so
 
 ### END OF CUSTOMIZATION ###
 SHELL := /bin/bash
@@ -37,3 +49,20 @@ distclean: clean
 
 install: all
 	/usr/bin/install -c mod_bcg729.so $(INSTALL_PREFIX)/$(FS_MODULES)/mod_bcg729.so
+
+deb: all
+        $(FPM) --provides $(DEBNAME) \
+        --deb-no-default-config-files -s dir -t deb \
+        --deb-build-depends debhelper \
+        --deb-build-depends libbcg729-dev \
+        --description $(DESC) \
+        -v $(VERSION) \
+        --iteration $(SUB_VERSION) \
+        --deb-priority optional \
+        --url $(URL) \
+        --maintainer $(AUTHOR) \
+        --vendor $(VENDOR) \
+        --license MPL 1.1 \
+        --depends $(FS_VERSION) \
+        --depends libbcg729-0 \
+        -n $(DEBNAME) $(MODNAME)=$(DESTDIR)/usr/lib/freeswitch/mod/$(MODNAME)
