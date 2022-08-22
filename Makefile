@@ -26,7 +26,9 @@ CFLAGS=-fPIC -O3 -fomit-frame-pointer -fno-exceptions -Wall -std=c99 -pedantic
 INCLUDES=-I/usr/include -Ibcg729/include -I$(FS_INCLUDES)
 LDFLAGS=-lm -Wl,-static -Lbcg729/src -lbcg729 -Wl,-Bdynamic
 
-all : mod_bcg729.o mod_bcg729.so deb
+all : clean mod_bcg729.o mod_bcg729.so deb
+
+mod_bcg729.so:
 	$(CC) $(CFLAGS) $(INCLUDES) -shared -Xlinker -x -o mod_bcg729.so mod_bcg729.o $(LDFLAGS)
 
 mod_bcg729.o: bcg729 mod_bcg729.c
@@ -50,9 +52,9 @@ distclean: clean
 install: all
 	/usr/bin/install -c mod_bcg729.so $(INSTALL_PREFIX)/$(FS_MODULES)/mod_bcg729.so
 
-deb: all
-        rm -f *.deb
-        $(FPM) --provides $(DEBNAME) \
+deb:
+	rm -f $(DEBNAME)_$(VERSION)-$(SUB_VERSION)_*.deb
+	$(FPM) --provides $(DEBNAME) \
         --deb-no-default-config-files -s dir -t deb \
         --deb-build-depends debhelper \
         --deb-build-depends libbcg729-dev \
@@ -63,8 +65,7 @@ deb: all
         --url $(URL) \
         --maintainer $(AUTHOR) \
         --vendor $(VENDOR) \
-        --license MPL 1.1 \
+        --license "MPL 1.1" \
         --depends $(FS_VERSION) \
         --depends libbcg729-0 \
-        --after-install post-install.sh \
         -n $(DEBNAME) $(MODNAME)=$(DESTDIR)/usr/lib/freeswitch/mod/$(MODNAME)
