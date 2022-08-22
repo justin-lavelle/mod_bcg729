@@ -2,3 +2,5 @@
 bcg729
 *.o
 *.so
+.vscode
+*.deb

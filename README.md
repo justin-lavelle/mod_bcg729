@@ -31,5 +31,3 @@ Now restart your FreeSWITCH and you're done.
 ## Create deb file
 
 make
-make install
-make deb
