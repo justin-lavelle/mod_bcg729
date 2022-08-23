@@ -27,3 +27,7 @@ After, just type make and, if build completes without errors, make install .
 
 Edit autoload_configs/modules.conf.xml , comment out mod_g729 and add mod_bcg729 .
 Now restart your FreeSWITCH and you're done.
+
+## Create deb file
+
+make
