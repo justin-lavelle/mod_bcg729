@@ -6,7 +6,7 @@ FS_MODULES=/usr/local/freeswitch/mod
 
 DESC="FreeSWITCH G.729A module using the opensource bcg729 implementation by Belledonne Communications"
 DEBNAME=freeswitch-mod-bcg729
-VERSION=1.1.0
+VERSION=1.1.1
 SUB_VERSION=$(shell git rev-list --count HEAD)
 AUTHOR="Roberto Paradinha"
 VENDOR="Broadvoice"
